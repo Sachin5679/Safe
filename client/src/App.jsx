@@ -20,7 +20,16 @@ function App() {
     Axios.post('http://localhost:3003/addpassword', {
       password: password,
       title: title,
-    });
+    }).then(() => {
+      //clear fields
+      setPassword('');
+      setTitle('');
+
+      //display new items as well(auto refresh)
+      Axios.get('http://localhost:3003/showpasswords').then((response) => {
+        setPasswords(response.data);
+      });
+    })
   };
 
 
