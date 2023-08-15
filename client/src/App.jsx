@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import Axios from 'axios'
 import './App.css'
+import PasswordDetail from './PasswordDetail';
 
 function App() {
   const [password, setPassword] = useState('');
   const [title, setTitle] = useState('');
   const [passwords, setPasswords] = useState([])
+  const [selectedPassword, setSelectedPassword] = useState(null);
+  const [decryptedPassword, setDecryptedPassword] = useState(null);
 
   useEffect(() => {
     Axios.get('http://localhost:3003/showpasswords').then((response) => {
@@ -20,51 +23,25 @@ function App() {
     });
   };
 
-  // const decryptPassword = (encryption) => {
-  //   Axios.post("http://localhost:3003/decryptpassword", {
-  //     password: encryption.password,
-  //     iv: encryption.iv,
-  //   }).then((response) => {
-  //     setPasswords(
-  //       passwords.map((val) => {
-  //         return val.id == encryption.id
-  //           ? {
-  //               id: val.id,
-  //               password: val.password,
-  //               title: response.data,
-  //               iv: val.iv,
-  //             }
-  //           : val;
-  //       })
-  //     );
-  //   });
-  // };
 
-  const decryptPassword = async (encryption) => {
-    try {
-      const response = await Axios.post("http://localhost:3003/decryptpassword", {
-        password: encryption.password,
-        iv: encryption.iv,
-      });
-  
-      const decryptedTitle = response.data;
-  
-      setPasswords((prevPasswords) =>
-        prevPasswords.map((val) => {
-          if (val.id === encryption.id) {
-            return {
-              ...val,
-              title: decryptedTitle,
-            };
-          } else {
-            return val;
-          }
-        })
-      );
-    } catch (error) {
-      console.error('Error decrypting password:', error);
-      // Handle the error gracefully (display an error message, etc.)
-    }
+  const decryptPassword = (encryption) => {
+    return Axios.post("http://localhost:3003/decryptpassword", {
+      password: encryption.password,
+      iv: encryption.iv,
+    }).then((response) => {
+      return response.data; // Return decrypted password
+    });
+  };
+
+  const handlePasswordClick = (val) => {
+    setSelectedPassword(val); // Set the selected password
+    decryptPassword({
+      password: val.password,
+      iv: val.iv,
+      id: val.id,
+    }).then((decrypted) => {
+      setDecryptedPassword(decrypted); // Set decrypted password
+    });
   };
   
 
@@ -90,26 +67,25 @@ function App() {
         <button className='bg-teal-300 text-white  p-2' onClick={addPassword}> Add Password</button>
       </div>
 
-      <div className="pt-5">
+      <div className="pt-5 cursor-pointer">
         <h1 className='font-bold text-5xl pb-5'>Your Passwords</h1>
         {passwords.map((val, key) => {
           return (
             <div
-              className="bg-teal-500 w-1/2 m-4 p-3 text-center rounded-xl"
-              onClick={() => {
-                decryptPassword({
-                  password: val.password,
-                  iv: val.iv,
-                  id: val.id,
-                });
+              className="outline hover:bg-teal-500 m-4 p-3 text-center rounded-xl"
+              onClick={(e) => {
+                handlePasswordClick(val)
               }}
               key={key}
             >
-              <h3 className='text-white '>{val.title}</h3>
+              <h3>{val.title}</h3>
             </div>
           );
         })}
       </div>
+      {selectedPassword && ( // Render the PasswordDetail component when a password is selected
+        <PasswordDetail decryptedPassword={decryptedPassword} />
+      )}
     </div>
   )
 }
