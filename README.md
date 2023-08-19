@@ -1,5 +1,7 @@
 # Safe
-A password manager
+A personal password manager
+
+Note: Will implement user authentication.
 ## Tech Stack Used
 ### Frontend:
  -ReactJS
