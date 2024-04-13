@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require("cors");
 const bodyParser = require('body-parser');
+const verifyToken = require('./middlewares/auth');
+const authRoutes = require('./routes/authRoutes')
 const PasswordModel = require('./models/PasswordModel')
 
 
@@ -14,7 +16,7 @@ const { encrypt, decrypt } = require('./encrypt');
 app.use(express.json());
 app.use(bodyParser.json());
 dotenv.config({ path: "../.env" });
-
+app.use('/auth', authRoutes)
 const DB = process.env.DB;
 
 
@@ -37,15 +39,16 @@ app.get("/", (req, res) => {
     res.send("Hello World!")
 })
 
-app.post('/addpassword', async(req, res) => {
+app.post('/addpassword', verifyToken, async(req, res) => {
     const { password, title } = req.body;
     const hashedPassword = encrypt(password);
-
+    const userId = req.userId;
     try {
       const passwordEntry = new PasswordModel({
         password: hashedPassword.password,
         title,
         iv: hashedPassword.iv,
+        user: userId,
       });
       
       await passwordEntry.save(); // Wait for the save operation to complete
@@ -61,9 +64,10 @@ app.post('/addpassword', async(req, res) => {
     }
 })
 
-app.get('/showpasswords', async(req, res) => {
+app.get('/showpasswords', verifyToken, async(req, res) => {
     try {
-        const result = await PasswordModel.find({}).exec();
+        const userId = req.userId;
+        const result = await PasswordModel.find({user: userId}).exec();
         res.status(200).json(result);
     } catch(err) {
         console.error(err);
@@ -73,7 +77,7 @@ app.get('/showpasswords', async(req, res) => {
 
 app.post("/decryptpassword", (req, res) => {
     res.send(decrypt(req.body));
-  })
+})
 
 app.listen(PORT, () => {
     console.log("Server running....");
