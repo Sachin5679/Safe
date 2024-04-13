@@ -15,6 +15,8 @@ Note: Will implement user authentication.
 
  -MongoDB (database)
 
+ -Bcrypt, JWT
+
  ## Current features:
 
   -Users can enter a website and it's password. This will be stored in the database(password will be encrypted).
@@ -23,10 +25,4 @@ Note: Will implement user authentication.
 
   -When user clicks on a website name in the frontend, the password of that website will be shown.
 
- ## To add:
- 
-   -User authentication.
 
-   -Better refactoring of code.
-
-   -The ability to store multiple passwords under one website, if user has multiple accounts.
