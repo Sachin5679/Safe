@@ -123,7 +123,7 @@ function App() {
                 setTitle(e.target.value);
               }}
             />
-            <button className='bg-teal-300 text-white  p-2' onClick={addPassword}>
+            <button className='bg-teal-300 text-white p-2' onClick={addPassword}>
               Add Password
             </button>
           </div>

@@ -10,7 +10,7 @@ function Registration() {
     try {
       const response = await Axios.post('http://localhost:3003/auth/signup', {
         username,
-        password: masterPwd,
+        masterPwd,
       });
   
       if (response.status === 201) { // Check for successful response (201 Created)
