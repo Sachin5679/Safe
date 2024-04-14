@@ -21,9 +21,10 @@ function App() {
       setUser(JSON.parse(storedUser));
     }
   
-    // Only fetch passwords if user is logged in (has a token)
+    
     if (user?.token) {
       const token = user.token;
+      console.log(token);
   
       Axios.get('http://localhost:3003/showpasswords', {
         headers: {
@@ -34,7 +35,6 @@ function App() {
         setPasswords(response.data);
       })
       .catch((error) => {
-        // Handle errors here
         console.error('Error fetching passwords:', error);
       });
     }
@@ -42,22 +42,28 @@ function App() {
   
 
   const addPassword = () => {
+    const token = localStorage.getItem('token');
     Axios.post('http://localhost:3003/addpassword', {
       password: password,
       title: title,
-    }).then(() => {
+    }, {headers: {
+      Authorization: `Bearer ${token}`,
+    }}).then(() => {
       setPassword('');
       setTitle('');
 
-      //display new items as well(auto refresh)
-      Axios.get('http://localhost:3003/showpasswords').then((response) => {
+      
+      Axios.get('http://localhost:3003/showpasswords', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
         setPasswords(response.data);
       });
     })
   };
 
   const decryptPassword = (encryption) => {
-    // Existing decryptPassword logic
     return Axios.post("http://localhost:3003/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
@@ -77,10 +83,17 @@ function App() {
     });
   };
 
-  const handleLogin = (loginData) => {
+  const handleLogin = async (loginData) => {
+    console.log(loginData.token);
     setUser({ ...loginData });
-    if (response.data.token) { // Assuming token is in response data
-      localStorage.setItem('token', response.data.token);
+    if (loginData.token) { 
+      localStorage.setItem('token', loginData.token);
+      const response = await Axios.get('http://localhost:3003/showpasswords', {
+        headers: {
+          Authorization: `Bearer ${loginData.token}`,
+        },
+      });
+      setPasswords(response.data);
     }
   };
 
@@ -91,7 +104,7 @@ function App() {
 
   return (
     <div className="p-5">
-      {user ? ( // Check if user is logged in
+      {user ? ( 
         <>
           <div className="grid m-2 bg-slate-500">
             <input
@@ -138,9 +151,7 @@ function App() {
         </>
       ) : (
         <>
-          {/* Login Component (replace with your component) */}
           <Login onLogin={handleLogin} />
-          {/* Registration Component (replace with your component) */}
           <Registration />
         </>
       )}
@@ -148,7 +159,6 @@ function App() {
   );
 }
 
-// Wrap password list with a protected route (replace YourPasswordListComponent)
 function ProtectedPasswords() {
   const isLoggedIn = user !== null;
 

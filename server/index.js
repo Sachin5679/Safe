@@ -51,7 +51,7 @@ app.post('/addpassword', verifyToken, async(req, res) => {
         user: userId,
       });
       
-      await passwordEntry.save(); // Wait for the save operation to complete
+      await passwordEntry.save(); 
       res.status(201).json({ message: 'Password entry saved successfully' });
     } catch (err) {
       console.error(err);

@@ -36,12 +36,14 @@ function Registration() {
       <h2>Registration</h2>
       {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
       <input
+        name='username'
         type="text"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
+        name='password'
         type="password"
         placeholder="Password"
         value={masterPwd}
