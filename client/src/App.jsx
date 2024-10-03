@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import Axios from 'axios'
-import './App.css'
+import Axios from 'axios';
+import './App.css';
 import PasswordDetail from './PasswordDetail';
 import Login from './Login';
 import Registration from './Registration';
-import { Navigate } from 'react-router-dom'; // Import for protected routes
-
+import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [password, setPassword] = useState('');
@@ -21,7 +22,6 @@ function App() {
       setUser(JSON.parse(storedUser));
     }
   
-    
     if (user?.token) {
       const token = user.token;
       console.log(token);
@@ -38,8 +38,7 @@ function App() {
         console.error('Error fetching passwords:', error);
       });
     }
-  }, []);
-  
+  }, [user]);
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
@@ -52,7 +51,6 @@ function App() {
       setPassword('');
       setTitle('');
 
-      
       Axios.get('http://localhost:3003/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -60,7 +58,7 @@ function App() {
       }).then((response) => {
         setPasswords(response.data);
       });
-    })
+    });
   };
 
   const decryptPassword = (encryption) => {
@@ -68,7 +66,7 @@ function App() {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
-      return response.data; // Return decrypted password
+      return response.data; 
     });
   };
 
@@ -99,74 +97,95 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('user'); // Remove user data from local storage
+    localStorage.removeItem('user'); 
+  };
+
+  const handleClosePasswordDetail = () => {
+    setSelectedPassword(null); 
+    setDecryptedPassword(null); 
   };
 
   return (
-    <div className="p-5">
-      {user ? ( 
-        <>
-          <div className="grid m-2 bg-slate-500">
-            <input
-              className='p-2'
-              type="text"
-              placeholder="Ex. password123"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <input
-              className='p-2'
-              type="text"
-              placeholder="Ex. Facebook"
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-            />
-            <button className='bg-teal-300 text-white p-2' onClick={addPassword}>
-              Add Password
-            </button>
-          </div>
-
-          <div className="pt-5 cursor-pointer">
-            <h1 className='font-bold text-5xl pb-5'>Your Passwords</h1>
-            {passwords.map((val, key) => {
-              return (
-                <div
-                  className="outline hover:bg-teal-500 m-4 p-3 text-center rounded-xl"
-                  onClick={(e) => {
-                    handlePasswordClick(val);
-                  }}
-                  key={key}
-                >
-                  <h3>{val.title}</h3>
+    <Router>
+      <div className="min-h-screen bg-gray-100">
+        {user ? (
+          <>
+            
+            <nav className="w-full bg-teal-500 text-white py-4 px-6 flex justify-between items-center">
+              <h1 className="text-2xl font-semibold">Safe</h1>
+              <button
+                className="text-white hover:text-red-500 transition-all"
+                onClick={handleLogout}
+              >
+                <FontAwesomeIcon icon={faSignOutAlt} size="lg" />
+              </button>
+            </nav>
+  
+            <div className="max-w-7xl mx-auto py-10 flex flex-col md:flex-row md:space-x-8">
+              <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-1/3 mb-4 md:mb-0">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Add a New Password</h2>
+                <div className="space-y-4">
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 outline-none"
+                    type="text"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 outline-none"
+                    type="text"
+                    placeholder="Enter title (e.g., Facebook)"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <button
+                    className="w-full py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600 focus:ring-2 focus:ring-teal-300 transition-all"
+                    onClick={addPassword}
+                  >
+                    Add Password
+                  </button>
                 </div>
-              );
-            })}
-          </div>
-          {selectedPassword && (
-            <PasswordDetail decryptedPassword={decryptedPassword} />
-          )}
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <>
-          <Login onLogin={handleLogin} />
-          <Registration />
-        </>
-      )}
-    </div>
+              </div>
+  
+              
+              <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-2/3 h-96 overflow-y-auto">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Your Passwords</h2>
+                {passwords.length > 0 ? (
+                  passwords.map((val, key) => (
+                    <div
+                      key={key}
+                      className="bg-gray-100 hover:bg-teal-500 p-4 m-2 rounded-lg cursor-pointer shadow transition-all"
+                      onClick={() => handlePasswordClick(val)}
+                    >
+                      <h3 className="text-lg font-medium text-gray-700 hover:text-white">{val.title}</h3>
+                    </div>
+                  ))
+                ) : (
+                  <p>No passwords available. Add one!</p>
+                )}
+              </div>
+            </div>
+  
+            
+            {selectedPassword && (
+              <PasswordDetail
+                decryptedPassword={decryptedPassword}
+                onClose={handleClosePasswordDetail}
+              />
+            )}
+          </>
+        ) : (
+          <Routes>
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        )}
+      </div>
+    </Router>
   );
-}
-
-function ProtectedPasswords() {
-  const isLoggedIn = user !== null;
-
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-
-  return <PasswordDetail passwords={passwords} />;
+  
 }
 
 export default App;
