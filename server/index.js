@@ -15,7 +15,7 @@ const { encrypt, decrypt } = require('./encrypt');
 
 app.use(express.json());
 app.use(bodyParser.json());
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "./.env" });
 const DB = process.env.DB;
 
 app.use('/auth', authRoutes)

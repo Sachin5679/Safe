@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');const crypto = require('crypto');
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "./.env" });
 const secret = process.env.JWT_SECRET;
 
 const encrypt = (password) => {
