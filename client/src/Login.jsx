@@ -17,7 +17,7 @@ function Login({ onLogin }) {
         masterPwd,
       });
 
-      if (response.data.success !== 401 && response.data.success !== 500) {
+      if (response.data.success!==401 && response.data.success!==500) {
         const token = response.data.token;
         onLogin({ user: response.data.user, token });
       } else {
@@ -46,7 +46,7 @@ function Login({ onLogin }) {
           <input
             className="border border-gray-300 rounded-lg p-2 w-full"
             name="password"
-            type={passwordVisible ? 'text' : 'password'} // Toggle between 'text' and 'password'
+            type={passwordVisible ? 'text' : 'password'} 
             placeholder="Password"
             value={masterPwd}
             onChange={(e) => setMasterPwd(e.target.value)}

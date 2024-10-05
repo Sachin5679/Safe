@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 const verifyToken = require('./middlewares/auth');
 const authRoutes = require('./routes/authRoutes');
+const { encrypt , decrypt} = require('./encrypt')
 const PasswordModel = require('./models/PasswordModel');
 
 const app = express();
 
-dotenv.config({ path: "./.env" });
+dotenv.config({ path: "../.env" });
 
 const corsOptions = {
     origin: 'https://safe-frontend-swart.vercel.app',
@@ -34,12 +35,12 @@ mongoose.connect(DB, {
     console.log(error);
 });
 
-// Root route
+
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-// Add password route
+
 app.post('/addpassword', verifyToken, async(req, res) => {
     const { password, title } = req.body;
     const hashedPassword = encrypt(password);
