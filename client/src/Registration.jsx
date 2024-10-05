@@ -7,7 +7,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 function Registration() {
   const [username, setUsername] = useState('');
   const [masterPwd, setMasterPwd] = useState('');
-  const [passwordVisible, setPasswordVisible] = useState(false); // Password visibility state
+  const [passwordVisible, setPasswordVisible] = useState(false); 
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleRegistration = async () => {
