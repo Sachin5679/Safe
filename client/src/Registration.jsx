@@ -51,7 +51,7 @@ function Registration() {
           <input
             className="border border-gray-300 rounded-lg p-2 w-full"
             name="password"
-            type={passwordVisible ? 'text' : 'password'} // Toggle between 'text' and 'password'
+            type={passwordVisible ? 'text' : 'password'} 
             placeholder="Password"
             value={masterPwd}
             onChange={(e) => setMasterPwd(e.target.value)}
