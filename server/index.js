@@ -11,9 +11,10 @@ const PasswordModel = require('./models/PasswordModel')
 const app = express();
 const corsOptions = {
     origin: 'https://safe-frontend-swart.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include any other needed methods
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
     credentials: true,
 };
+app.use(cors(corsOptions)); 
 
 
 const { encrypt, decrypt } = require('./encrypt');
