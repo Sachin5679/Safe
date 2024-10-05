@@ -15,6 +15,8 @@ function Registration() {
       const response = await Axios.post('https://safe-backend-teal.vercel.app/auth/signup', {
         username,
         masterPwd,
+      },      {
+        withCredentials: true, 
       });
 
       if (response.status === 201) {

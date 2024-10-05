@@ -15,6 +15,8 @@ function Login({ onLogin }) {
       const response = await Axios.post('https://safe-backend-teal.vercel.app/auth/login', {
         username,
         masterPwd,
+      },      {
+        withCredentials: true
       });
 
       if (response.data.success!==401 && response.data.success!==500) {
