@@ -12,7 +12,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await Axios.post('http://localhost:3003/auth/signup', {
+      const response = await Axios.post('https://safe-backend-teal.vercel.app/auth/signup', {
         username,
         masterPwd,
       });

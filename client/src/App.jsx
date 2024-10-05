@@ -26,7 +26,7 @@ function App() {
       const token = user.token;
       console.log(token);
   
-      Axios.get('http://localhost:3003/showpasswords', {
+      Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,7 +42,7 @@ function App() {
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    Axios.post('http://localhost:3003/addpassword', {
+    Axios.post('https://safe-backend-teal.vercel.app/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -51,7 +51,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      Axios.get('http://localhost:3003/showpasswords', {
+      Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -62,7 +62,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return Axios.post("http://localhost:3003/decryptpassword", {
+    return Axios.post("https://safe-backend-teal.vercel.app/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -86,7 +86,7 @@ function App() {
     setUser({ ...loginData });
     if (loginData.token) { 
       localStorage.setItem('token', loginData.token);
-      const response = await Axios.get('http://localhost:3003/showpasswords', {
+      const response = await Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
