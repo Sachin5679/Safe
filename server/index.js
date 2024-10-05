@@ -18,11 +18,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
-
-
 app.options('*', cors(corsOptions));
-
+app.use(express.json());
 app.use('/auth', authRoutes); 
 
 const DB = process.env.DB;
