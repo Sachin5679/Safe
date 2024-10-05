@@ -16,8 +16,10 @@ const { encrypt, decrypt } = require('./encrypt');
 app.use(express.json());
 app.use(bodyParser.json());
 dotenv.config({ path: "../.env" });
-app.use('/auth', authRoutes)
 const DB = process.env.DB;
+console.log('Database URI:', process.env.DB); // Add this line to debug
+
+app.use('/auth', authRoutes)
 
 
 mongoose.connect(DB, {
