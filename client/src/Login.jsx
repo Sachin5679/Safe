@@ -68,7 +68,7 @@ function Login({ onLogin }) {
         </button>
         <p className="text-center mt-4">
           Don't have an account?
-          <Link to="/register" className="text-blue-500 hover:underline ml-1">Register</Link>
+          <Link to="/signup" className="text-blue-500 hover:underline ml-1">Signup</Link>
         </p>
       </div>
     </div>
