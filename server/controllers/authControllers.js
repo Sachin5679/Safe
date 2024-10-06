@@ -6,6 +6,7 @@ dotenv.config({ path: "../.env" });
 
 exports.signup = async(req, res) => {
     try {
+        console.log('Signup handler reached');
         const { username, masterPwd } = req.body;
         const hashedPassword = await bcrypt.hash(masterPwd, 10);
         const newUser = new userModel({username, masterPwd:hashedPassword});

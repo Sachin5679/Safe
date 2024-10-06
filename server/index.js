@@ -19,7 +19,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('/auth/signup', cors(corsOptions));
+// app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use('/', (req, res, next) => {
     res.send('Hello from the root route!');
