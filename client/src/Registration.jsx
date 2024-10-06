@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
+import axios from 'axios';
 import { Link } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await Axios.post('https://safe-backend-teal.vercel.app/auth/signup', {
+      const response = await axios.post('https://safe-backend-teal.vercel.app/auth/signup', {
         username,
         masterPwd,
       },      {

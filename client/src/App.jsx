@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Axios from 'axios';
+import axios from 'axios';
 import './App.css';
 import PasswordDetail from './PasswordDetail';
 import Login from './Login';
@@ -26,7 +26,7 @@ function App() {
       const token = user.token;
       console.log(token);
   
-      Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,7 +42,7 @@ function App() {
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    Axios.post('https://safe-backend-teal.vercel.app/addpassword', {
+    axios.post('https://safe-backend-teal.vercel.app/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -51,7 +51,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -62,7 +62,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return Axios.post("https://safe-backend-teal.vercel.app/decryptpassword", {
+    return axios.post("https://safe-backend-teal.vercel.app/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -86,7 +86,7 @@ function App() {
     setUser({ ...loginData });
     if (loginData.token) { 
       localStorage.setItem('token', loginData.token);
-      const response = await Axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      const response = await axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
@@ -178,7 +178,7 @@ function App() {
         ) : (
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/register" element={<Registration />} />
+            <Route path="/signup" element={<Registration/>} />
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         )}
