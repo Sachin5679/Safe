@@ -12,7 +12,7 @@ const app = express();
 dotenv.config({ path: "../.env" });
 
 const corsOptions = {
-    origin: 'https://safe-frontend-swart.vercel.app',
+    origin: 'https://safe-frontend-swart.vercel.app/login',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
     // allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
