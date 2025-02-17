@@ -4,7 +4,7 @@ import './App.css';
 import PasswordDetail from './PasswordDetail';
 import Login from './Login';
 import Registration from './Registration';
-import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,12 +21,14 @@ function App() {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+  }, []); // Run only once on component mount
   
+  useEffect(() => {
     if (user?.token) {
       const token = user.token;
       console.log(token);
   
-      axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      axios.get('http://localhost:3003/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,11 +40,12 @@ function App() {
         console.error('Error fetching passwords:', error);
       });
     }
-  }, [user]);
+  }, [user]); // This effect will only run when `user` state changes
+  
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    axios.post('https://safe-backend-teal.vercel.app/addpassword', {
+    axios.post('http://localhost:3003/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -51,7 +54,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      axios.get('http://localhost:3003/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -62,7 +65,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return axios.post("https://safe-backend-teal.vercel.app/decryptpassword", {
+    return axios.post("http://localhost:3003/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -86,7 +89,9 @@ function App() {
     setUser({ ...loginData });
     if (loginData.token) { 
       localStorage.setItem('token', loginData.token);
-      const response = await axios.get('https://safe-backend-teal.vercel.app/showpasswords', {
+      localStorage.setItem('user', JSON.stringify(loginData)); // Store user info as well
+
+      const response = await axios.get('http://localhost:3003/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
@@ -97,7 +102,8 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('user'); 
+    localStorage.removeItem('token'); 
+    localStorage.removeItem('user');
   };
 
   const handleClosePasswordDetail = () => {
@@ -106,11 +112,10 @@ function App() {
   };
 
   return (
-    <Router>
+    <BrowserRouter>
       <div className="min-h-screen bg-gray-100">
         {user ? (
           <>
-            
             <nav className="w-full bg-teal-500 text-white py-4 px-6 flex justify-between items-center">
               <h1 className="text-2xl font-semibold">Safe</h1>
               <button
@@ -128,16 +133,16 @@ function App() {
                   <input
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 outline-none"
                     type="text"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter title (e.g., Facebook)"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                   <input
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-400 outline-none"
                     type="text"
-                    placeholder="Enter title (e.g., Facebook)"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <button
                     className="w-full py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600 focus:ring-2 focus:ring-teal-300 transition-all"
@@ -148,7 +153,6 @@ function App() {
                 </div>
               </div>
   
-              
               <div className="bg-white shadow-md rounded-lg p-6 w-full md:w-2/3 h-96 overflow-y-auto">
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800">Your Passwords</h2>
                 {passwords.length > 0 ? (
@@ -167,7 +171,6 @@ function App() {
               </div>
             </div>
   
-            
             {selectedPassword && (
               <PasswordDetail
                 decryptedPassword={decryptedPassword}
@@ -178,14 +181,13 @@ function App() {
         ) : (
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/signup" element={<Registration/>} />
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="/signup" element={<Registration />} />
+            <Route path="/" element={<Navigate to="/login" replace />} /> {/* Redirect to /login if not logged in */}
           </Routes>
         )}
       </div>
-    </Router>
+    </BrowserRouter>
   );
-  
 }
 
 export default App;
