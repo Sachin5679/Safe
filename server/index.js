@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 const verifyToken = require('./middlewares/auth');
 const authRoutes = require('./routes/authRoutes');
-const { encrypt , decrypt} = require('./encrypt')
+const { encrypt , decrypt } = require('./encrypt')
 const PasswordModel = require('./models/PasswordModel');
 
 const app = express();
@@ -12,7 +12,7 @@ const app = express();
 dotenv.config({ path: "../.env" });
 
 const corsOptions = {
-    origin: 'https://safe-frontend-swart.vercel.app',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
     // allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -81,7 +81,7 @@ app.post("/decryptpassword", (req, res) => {
     res.send(decrypt(req.body));
 });
 
-const PORT = process.env.PORT || 3003; 
+const PORT = 3003; 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

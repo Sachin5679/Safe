@@ -1,6 +1,14 @@
-const dotenv = require('dotenv');const crypto = require('crypto');
+const dotenv = require('dotenv');
+const crypto = require('crypto');
 dotenv.config({ path: "./.env" });
 const secret = process.env.JWT_SECRET;
+console.log(secret.length);
+
+
+if (secret.length !== 32) {
+  throw new Error("JWT_SECRET must be 32 characters long.");
+}
+
 
 const encrypt = (password) => {
     const iv = Buffer.from(crypto.randomBytes(16));
