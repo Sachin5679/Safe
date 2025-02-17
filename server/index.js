@@ -15,7 +15,7 @@ const corsOptions = {
     origin: ['https://safe-frontend-swart.vercel.app', 'https://safe-frontend-swart.vercel.app/login', 'https://safe-frontend-swart.vercel.app/signup'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    // credentials: true,
 };
 
 app.options('*', cors(corsOptions));
