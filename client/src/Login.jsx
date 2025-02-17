@@ -12,7 +12,7 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3003/auth/login', {
+      const response = await axios.post('https://safe-backend-teal.vercel.app/auth/login', {
         username,
         masterPwd,
       },      {
