@@ -12,7 +12,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await axios.post('https://safe-backend.up.railway.app/auth/signup', {
+      const response = await axios.post('https://safe-production-0820.up.railway.app/auth/signup', {
         username,
         masterPwd,
       },      {

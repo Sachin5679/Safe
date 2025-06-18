@@ -28,7 +28,7 @@ function App() {
       const token = user.token;
       console.log(token);
   
-      axios.get('https://safe-backend.up.railway.app/showpasswords', {
+      axios.get('https://safe-production-0820.up.railway.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ function App() {
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    axios.post('https://safe-backend.up.railway.app/addpassword', {
+    axios.post('https://safe-production-0820.up.railway.app/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -54,7 +54,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      axios.get('https://safe-backend.up.railway.app/showpasswords', {
+      axios.get('https://safe-production-0820.up.railway.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return axios.post("https://safe-backend.up.railway.app/decryptpassword", {
+    return axios.post("https://safe-production-0820.up.railway.app/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -91,7 +91,7 @@ function App() {
       localStorage.setItem('token', loginData.token);
       localStorage.setItem('user', JSON.stringify(loginData)); // Store user info as well
 
-      const response = await axios.get('https://safe-backend.up.railway.app/showpasswords', {
+      const response = await axios.get('https://safe-production-0820.up.railway.app/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
