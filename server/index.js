@@ -11,15 +11,29 @@ const app = express();
 
 dotenv.config({ path: "../.env" });
 
+
+const allowedOrigins = [
+  'https://safe-frontend-swart.vercel.app',
+  'http://localhost:5173',
+];
+
 const corsOptions = {
-    origin: ['https://safe-frontend-swart.vercel.app', 'http://localhost:5173'], // Add localhost for local dev
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,  // If you need to send cookies, keep this enabled
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200, // For legacy browser support
 };
 
+// Place this at the top, right after express initialization
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));  // Preflight requests for all routes
+app.options('*', cors(corsOptions));
 
 
 app.use(express.json());
@@ -83,7 +97,8 @@ app.post("/decryptpassword", (req, res) => {
     res.send(decrypt(req.body));
 });
 
-const PORT = 3003; 
+const PORT = process.env.PORT || 3003;
+ 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
