@@ -85,7 +85,7 @@ function App() {
   };
 
   const handleLogin = async (loginData) => {
-    console.log(loginData.token);
+    // console.log(loginData.token);
     setUser({ ...loginData });
     if (loginData.token) { 
       localStorage.setItem('token', loginData.token);
