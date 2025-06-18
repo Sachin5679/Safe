@@ -26,7 +26,7 @@ function App() {
   useEffect(() => {
     if (user?.token) {
       const token = user.token;
-      console.log(token);
+      // console.log(token);
   
       axios.get('https://safe-production-0820.up.railway.app/showpasswords', {
         headers: {
