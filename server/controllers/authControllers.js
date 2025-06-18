@@ -22,14 +22,14 @@ exports.login = async(req, res) => {
     try {
         const { username, masterPwd } = req.body;
         const user = await userModel.findOne({ username });
-        console.log(user);
+        // console.log(user);
     
         if (!user) {
           return res.status(401).json({ message: 'Invalid username or password' });
         }
     
-        console.log(masterPwd); 
-        console.log(user.masterPwd);
+        // console.log(masterPwd); 
+        // console.log(user.masterPwd);
     
         const isMatch = await bcrypt.compare(masterPwd, user.masterPwd);
         console.log(isMatch);
@@ -41,7 +41,7 @@ exports.login = async(req, res) => {
         console.log(payload);
         const secret = process.env.JWT_SECRET;
         const token = jwt.sign(payload, secret, {expiresIn: '1h'});
-        console.log(token);
+        // console.log(token);
         res.status(200).json({ token, message: 'Login successful!' });
     } catch (err) {
         console.error(err);
