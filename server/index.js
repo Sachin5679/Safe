@@ -9,8 +9,8 @@ const PasswordModel = require('./models/PasswordModel');
 
 const app = express();
 
-// dotenv.config({ path: "../.env" });
-dotenv.config();
+dotenv.config({ path: "../.env" });
+// dotenv.config();
 
 const allowedOrigins = [
   'https://safe-frontend-swart.vercel.app',

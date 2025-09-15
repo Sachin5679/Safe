@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://safe-production-0820.up.railway.app/auth/login', {
+      const response = await axios.post('http://localhost:8080/auth/login', {
         username,
         masterPwd,
       },      {
@@ -67,12 +68,15 @@ function Login({ onLogin }) {
           Login
         </button>
         <p className="text-center mt-4">
-          Don't have an account?
+          Don&#39;t have an account?
           <Link to="/signup" className="text-blue-500 hover:underline ml-1">Signup</Link>
         </p>
       </div>
     </div>
   );
 }
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+};
 
 export default Login;

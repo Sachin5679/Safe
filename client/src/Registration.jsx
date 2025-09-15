@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await axios.post('https://safe-production-0820.up.railway.app/auth/signup', {
+      const response = await axios.post('http://localhost:8080/auth/signup', {
         username,
         masterPwd,
       },      {
