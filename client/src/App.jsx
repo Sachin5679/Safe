@@ -28,7 +28,7 @@ function App() {
       const token = user.token;
       // console.log(token);
   
-      axios.get('http://localhost:8080/showpasswords', {
+      axios.get('http://3.110.83.157:8080/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ function App() {
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    axios.post('http://localhost:8080/addpassword', {
+    axios.post('http://3.110.83.157:8080/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -54,7 +54,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      axios.get('http://localhost:8080/showpasswords', {
+      axios.get('http://3.110.83.157:8080/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return axios.post("http://localhost:8080/decryptpassword", {
+    return axios.post("http://3.110.83.157:8080/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -91,7 +91,7 @@ function App() {
       localStorage.setItem('token', loginData.token);
       localStorage.setItem('user', JSON.stringify(loginData)); // Store user info as well
 
-      const response = await axios.get('http://localhost:8080/showpasswords', {
+      const response = await axios.get('http://3.110.83.157:8080/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
