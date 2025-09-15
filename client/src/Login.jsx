@@ -13,7 +13,7 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://3.110.83.157:8080/auth/login', {
+      const response = await axios.post('https://3.110.83.157:8080/auth/login', {
         username,
         masterPwd,
       },      {
