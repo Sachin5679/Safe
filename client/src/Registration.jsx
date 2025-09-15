@@ -12,7 +12,7 @@ function Registration() {
 
   const handleRegistration = async () => {
     try {
-      const response = await axios.post('https://3.110.83.157:8080/auth/signup', {
+      const response = await axios.post('http://3.110.83.157:8080/auth/signup', {
         username,
         masterPwd,
       },      {

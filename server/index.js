@@ -91,8 +91,7 @@ app.post("/decryptpassword", (req, res) => {
     res.send(decrypt(req.body));
 });
 
-const PORT = process.env.PORT || 3003;
- 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
