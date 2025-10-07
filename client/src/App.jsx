@@ -28,7 +28,7 @@ function App() {
       const token = user.token;
       // console.log(token);
   
-      axios.get('http://3.110.83.157:8080/showpasswords', {
+      axios.get('https://safebackend.duckdns.org/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ function App() {
 
   const addPassword = () => {
     const token = localStorage.getItem('token');
-    axios.post('http://3.110.83.157:8080/addpassword', {
+    axios.post('https://safebackend.duckdns.org/addpassword', {
       password: password,
       title: title,
     }, {headers: {
@@ -54,7 +54,7 @@ function App() {
       setPassword('');
       setTitle('');
 
-      axios.get('http://3.110.83.157:8080/showpasswords', {
+      axios.get('https://safebackend.duckdns.org/showpasswords', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ function App() {
   };
 
   const decryptPassword = (encryption) => {
-    return axios.post("http://3.110.83.157:8080/decryptpassword", {
+    return axios.post("https://safebackend.duckdns.org/decryptpassword", {
       password: encryption.password,
       iv: encryption.iv,
     }).then((response) => {
@@ -89,9 +89,9 @@ function App() {
     setUser({ ...loginData });
     if (loginData.token) { 
       localStorage.setItem('token', loginData.token);
-      localStorage.setItem('user', JSON.stringify(loginData)); // Store user info as well
+      localStorage.setItem('user', JSON.stringify(loginData)); 
 
-      const response = await axios.get('http://3.110.83.157:8080/showpasswords', {
+      const response = await axios.get('https://safebackend.duckdns.org/showpasswords', {
         headers: {
           Authorization: `Bearer ${loginData.token}`,
         },
